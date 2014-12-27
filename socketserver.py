@@ -26,7 +26,11 @@ class socketHandler(SocketServer.BaseRequestHandler):
         password = params["password"]
 
         db = blueid.CRUD()
-        db.login(username,password)
+        if command == "login":
+            db.login(username,password)
+        else: #todo add logout
+            if command == "logout":
+                db.logout("sessionkey")
 
         self.request.sendall(self.data.upper())
 

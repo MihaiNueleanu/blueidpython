@@ -25,17 +25,23 @@ class socketHandler(SocketServer.BaseRequestHandler):
         username = params["username"]
         password = params["password"]
 
-        db = blueid.CRUD()
+        db = blueid.crud()
         if command == "login":
-            db.login(username,password)
+            self.request.send(db.login(username,password)+'\r\n')
+            #db.login(username,password)
         else: #todo add logout
             if command == "logout":
                 db.logout("sessionkey")
 
-        self.request.sendall(self.data.upper())
+        #self.request.sendall(self.data.upper())
 
 
 if __name__ == "__main__":
+    db = blueid.crud()
+    db.initial_setup();
+
     # Create the server on localhost port 9999
     server = SocketServer.TCPServer((HOST, PORT), socketHandler)
     server.serve_forever()
+    print "::::::::::::::: server running :::::::::::::::"
+
